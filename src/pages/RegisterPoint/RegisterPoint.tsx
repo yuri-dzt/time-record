@@ -1,45 +1,78 @@
-import { useState } from "react";
-import "../../styles/RegisterPoint.css";
+import { useNavigate } from "react-router-dom";
+import { getRegisterPoint, registerPoint } from "../../api/requests/register";
+import { Button } from "../../components/Button";
 
 const RegisterPoint = () => {
-  const [records, setRecords] = useState<{
-    entry: string | null;
-    lunchOut: string | null;
-    lunchIn: string | null;
-    exit: string | null;
-  }>({
-    entry: null,
-    lunchOut: null,
-    lunchIn: null,
-    exit: null,
-  });
-
-  const handlePunch = (type: keyof typeof records) => {
-    const currentTime = new Date().toLocaleTimeString();
-    setRecords((prev) => ({ ...prev, [type]: currentTime }));
-  };
+  const registers = getRegisterPoint();
+  const navigate = useNavigate();
 
   return (
-    <div className="register-container">
-      <h2>Registrar Ponto</h2>
-      <div className="button-group">
-        <button onClick={() => handlePunch("entry")}>Marcar Entrada</button>
-        <button onClick={() => handlePunch("lunchOut")}>
-          Saída para Almoço
+    <div className="w-screen h-screen overflow-hidden flex items-center justify-center flex-col bg-light gap-5 relative">
+      <div className="absolute top-[5%] right-[5%]">
+        <button
+          onClick={() => {
+            navigate("/history");
+          }}
+          className="text-sm font-semibold text-white p-3 rounded-lg bg-darkGray"
+        >
+          Ver Historico
         </button>
-        <button onClick={() => handlePunch("lunchIn")}>
-          Retorno do Almoço
-        </button>
-        <button onClick={() => handlePunch("exit")}>Marcar Saída</button>
       </div>
-      <div className="records">
-        <h3>Registros do Dia</h3>
-        <ul>
-          <li>Entrada: {records.entry || "---"}</li>
-          <li>Saída para Almoço: {records.lunchOut || "---"}</li>
-          <li>Retorno do Almoço: {records.lunchIn || "---"}</li>
-          <li>Saída: {records.exit || "---"}</li>
-        </ul>
+      <div className="w-[60vw] flex flex-col items-center justify-center gap-6">
+        <h2 className="text-2xl font-bold text-darkGray">Registrar Ponto</h2>
+        <div className="w-full grid grid-cols-4 gap-5">
+          <Button
+            text="Marcar Entrada"
+            type="button"
+            onClick={() => registerPoint()}
+          />
+          <Button
+            text="Saída para Almoço"
+            type="button"
+            onClick={() => registerPoint()}
+          />
+          <Button
+            text="Retorno do Almoço"
+            type="button"
+            onClick={() => registerPoint()}
+          />
+          <Button
+            text="Marcar Saída"
+            type="button"
+            onClick={() => registerPoint()}
+          />
+        </div>
+        <div className="bg-white rounded-lg p-5 w-full shadow-md flex flex-col items-center justify-center gap-4">
+          <h3 className="text-darkGray font-semibold text-lg">
+            Registros do Dia
+          </h3>
+          <ul className="w-full flex flex-row items-start justify-start gap-2">
+            <li className="w-full flex flex-col items-center gap-4 justify-start text-darkGray">
+              <span className="font-semibold text-base text-darkGray">
+                Entrada:
+              </span>
+              <span>08:00</span>
+            </li>
+            <li className="w-full flex flex-col items-center gap-4 justify-start text-darkGray">
+              <span className="font-semibold text-base text-darkGray">
+                Saída para Almoço:
+              </span>
+              <span>12:00</span>
+            </li>
+            <li className="w-full flex flex-col items-center gap-4 justify-start text-darkGray">
+              <span className="font-semibold text-base text-darkGray">
+                Retorno do Almoço:
+              </span>
+              <span>13:15</span>
+            </li>
+            <li className="w-full flex flex-col items-center gap-4 justify-start text-darkGray">
+              <span className="font-semibold text-base text-darkGray">
+                Saída:
+              </span>
+              <span>18:00</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
